@@ -1,0 +1,9 @@
+
+#environment
+venv
+
+
+
+
+#pycache
+*.pyc
