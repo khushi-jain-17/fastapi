@@ -3,8 +3,13 @@ from typing import Optional
 from pydantic import BaseModel 
 from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId 
+from fastapi.staticfiles import StaticFiles
+import uvicorn
 
 app = FastAPI()
+
+# Mount the current folder to serve static files
+# app.mount("/", StaticFiles(directory=".", html=True), name="static")
 
 
 client = AsyncIOMotorClient("mongodb://localhost:27017")
@@ -101,10 +106,19 @@ async def get_student(student_id: str):
     raise HTTPException(status_code=404, detail="student not found")    
 
 
-@app.get("/")
-def index():
-    return {"name":"First Data"}
 
+import os
+from fastapi.responses import FileResponse
+@app.get("/")
+def read_root():
+    # return {"message":"hello docker"}
+    return FileResponse("index.html")
+    # file_path = os.path.join(os.getcwd(), "index.html")
+    # return FileResponse(file_path)
+
+
+# if __name__ == "__main__":
+#     uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)
 
 
 # @app.get("/get-by-name/{student_id}")
